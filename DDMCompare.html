@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang = "en">
+    <head>
+        <title>DDMCompare</title>
+        <meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+
+        <!--<script src="UILIB.mjs" type = "module"></script>-->
+        <!--<script src="DDMCompare.mjs" type = "module"></script>-->
+        <!--<script src="https://cdn.jsdelivr.net/gh/svensesen/DDMCompare@V1.0/DDMCompare.mjs" type = "module"></script>-->
+        <script src="https://d3js.org/d3.v5.js"></script>
+
+        <style>
+            .center-screen {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                margin-right: -50%;
+                transform: translate(-50%, -50%);
+            }
+
+            #wrapper {
+                border: 1px solid black;
+                overflow: auto; 
+            }
+
+            #matrix00 {      
+                border: 1px solid red;
+            }
+
+            #matrix01 {   
+                border: 1px solid green;
+            }
+            
+            #matrix02 { 
+                border: 1px solid blue;
+            }
+
+            #matrix00, #matrix01, #matrix02, #matrix10, #matrix11, #matrix12 {
+                float:left;
+                display: block;
+                overflow: hidden;
+                /**vertical-align: top;*/
+            }
+
+            #matrix00zoomB, #matrix02zoomB {
+                margin: auto;
+                position: absolute;
+                top:9%;
+                z-index:10;
+            }
+
+        </style>
+    </head>
+    <body>
+        <span id="ruler" visibility="hidden" white-space="nowrap"></span>
+        <input type="file" accept=".txt" multiple="multiple">
+        <button id="fileLoaderButton">Load File(s)</button>
+        <input id="stringInput"></input>
+        <button id="stringLoaderButton">Load String</button> 
+        <button id="sampleButton">Load Samples</button> 
+        <select id = "typeDropDown">
+            <option value = "basic"> Direct Standard </option>
+            <option value = "quadratic"> Direct Standard Quadratic </option>
+            <option value = "basic_distance"> Direct Distance</option>
+            <option value = "quadratic_distance"> Direct Distance Quadratic </option>
+            <option value = "min_PGM"> Minimum Pair Group Method </option>
+            <option value = "max_PGM"> Maximum Pair Group Method </option>
+            <option value = "average_PGM"> Average Pair Group Method </option>
+        </select>
+        <select id = "sortingDropDown">
+            <option value = "default"> Default Sorting </option>
+            <option value = "seriation"> Seriation </option>
+            <option value = "low-high"> Lowest to Highest </option>
+            <option value = "high-low"> Highest to Lowest </option>
+        </select>
+        <input type = "checkbox" id="nullCheckbox"></input>
+        <label for="nullCheckbox">Keep nulls</label>
+        <input type="checkbox" id="absoluteCheckbox"></input>
+        <label for="absoluteCheckbox">Absolute Differences</label>
+        <select id = "threeColorDropDown">
+            <option value = "temperature"> Temperature </option>
+            <option value = "aqua-brown"> Earthly </option>
+            <option value = "pink-green"> Vibrance </option>
+            <option value = "purple-orange"> Hypnosis </option>
+        </select>
+        <select id = "twoColorDropDown" style="display:none">
+            <option value = "white-black"> Monochrome </option>
+            <option value = "orange"> Warmth </option>
+            <option value = "blue"> Cool </option>
+            <option value = "green"> Nature </option>
+        </select>
+        <input type="checkbox" id="fancyCheckbox"></input>
+        <label for="fancyCheckbox">Unlocked Labels</label>
+        <input type="checkbox" id="nodeLabelsCheckbox"></input>
+        <label for="nodeLabelsCheckbox">Show Node Labels</label>
+        <button id="testButton">Generate</button>
+        <pre id="file"></pre>
+        
+        <div id="loadedTrees" style="display:inline"></div>
+        
+
+        <div id="wrapper">
+            <div id="Fmatrix00" >   
+                <div id="matrix00" style="align-items:vertical-align;"></div>    
+                <button id="matrix00zoomB" style="align-items:vertical-align;"></button> 
+            </div>
+            <div id="Fmatrix01">
+                <div id="matrix01"></div>
+            </div>
+            <div id="Fmatrix02"> 
+                <div id="matrix02"></div>   
+                <button id="matrix02zoomB"></button>
+            </div>
+        </div>
+
+        <div id="wrapper2">
+            <div id="Fmatrix10">   
+                <div id="matrix10"></div>     
+            </div>
+            <div id="Fmatrix11">
+                <div id="matrix11"></div>
+            </div>
+            <div id="Fmatrix12"> 
+                <div id="matrix12"></div>   
+            </div>
+        </div>
+
+        <div id="searcher"></div>
+        <!--
+        <div id="matrix" align ="left" display = "inline-block"></div>
+        <div id="matrix1" align = "right" display = "inline-block"></div>
+        <div id="matrix2"></div>-->
+
+        <div id="explanation">  
+            <font size="+2"> If the number is less than 0 the distance is <b>larger</b> on the left and vice versa. </font>
+        </div>
+        <div id="disclaimer">  
+            <font size="+1"> Seriation in the current version displays the default sorting since the implementations thus far have been dysfunctional. </font>
+        </div>
+
+    </body>
+</html>

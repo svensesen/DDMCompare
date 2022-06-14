@@ -586,9 +586,6 @@ export class TreeLeaf extends TreeNode {
 }
 
 
-import {TreeNode, TreeRoot, TreeLeaf} from "./NodeLIB.mjs";
-import {print, check_type, equal_array} from "./ErrorLIB.mjs"
-
 
 /**
  * A tree graph

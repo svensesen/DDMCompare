@@ -1184,8 +1184,10 @@ explanation.style.display = "none";
 const disclaimer = document.getElementById("disclaimer");
 disclaimer.style.display = "none";
 
-let testButton = document.getElementById("testButton");
+const testButton = document.getElementById("testButton");
 testButton.addEventListener("click", generate);
+
+const sampleButton = document.getElementById("sampleButton");
 
 
 
@@ -1193,7 +1195,7 @@ testButton.addEventListener("click", generate);
  * What happens when the file loader button is pressed
  * @param {Node} e the pressed button
  */
-function fileInputAccept(e) {
+function fileInputAccept() {
     const selected_files = fileInput.files;
     if (selected_files) { //If any files are selected
         for (var i = 0; i<selected_files.length; i++) { //Load each file and create a new tree table
@@ -1211,8 +1213,12 @@ function fileInputAccept(e) {
  * What happens when the string loader button is pressed
  * @param {Node} e the pressed button
  */
-function stringInputAccept(e) {
-    const newick_string = stringInput.value;
+function stringInputAccept(e, input_string = "none", input_name = "none") {
+    let newick_string = stringInput.value;
+    stringInput.value = "";
+
+    if (input_string != "none") { newick_string = input_string; }
+    
     if (newick_string) { //If the is input filed
         //creates a non-duplicate custom name
         let tree_table_name = "custom tree";
@@ -1225,6 +1231,8 @@ function stringInputAccept(e) {
             tree_table_name = `custom tree (${counter})`;
             counter += 1;
         }
+
+        if (input_name != "none") { tree_table_name = input_name; }
 
         let tree_table = new TreeTable(tree_table_name);
         tree_table.create_tree_newick_string(newick_string);
@@ -1266,17 +1274,17 @@ function update_LoadedTrees() {
                 this.parentNode.inputChanger.style.display = "inline";
 
                 this.parentNode.cancelChanger.style.display = "inline";
-                this.parentNode.checkBox.style.display = "none"
+                this.parentNode.checkBox.style.display = "none";
             }
 
             else { // if currently changing the name
                 this.parentNode.treeTable.set_name(this.parentNode.inputChanger.value)
 
                 this.innerHTML = "Change name"
-                this.parentNode.inputChanger.style.display = "none"
+                this.parentNode.inputChanger.style.display = "none";
                 this.parentNode.nameDisplay.innerHTML = this.parentNode.treeTable.name + "  ";
                 this.parentNode.cancelChanger.style.display = "none";
-                this.parentNode.checkBox.style.display = "inline"
+                this.parentNode.checkBox.style.display = "inline";
             }
         });
         subLoadedTrees.appendChild(nameChanger);
@@ -1295,6 +1303,7 @@ function update_LoadedTrees() {
             this.parentNode.inputChanger.style.display = "none"
             this.parentNode.nameDisplay.innerHTML = this.parentNode.treeTable.name + "  ";
             this.style.display = "none";
+            this.parentNode.checkBox.style.display = "inline";
         })
         subLoadedTrees.insertAfter(cancelChanger, nameChanger);
         subLoadedTrees.cancelChanger = cancelChanger;
@@ -1576,6 +1585,30 @@ function addSearcher(visualization) {
     }) 
     searcher.appendChild(nameSearchButton);
 }
+
+const phyloTree1 = "((yli:1.0085614391793067,(((lel:0.2880678599618948,(cal:0.11643570498932501,ctr:0.12746420698315983):0.0877413194006926):0.12449843844102518,pst:0.20187\
+    483296288805):0.04951181210826987,(pgu:0.3208350693977453,dha:0.19121342958249643):0.0444880656387921):0.3761988962574594):0.22545281705785974,(((kla:0.32829009627835226,\
+    :0.35217085340006204):0.057415467336693615,(skl:0.15813405639248146,kwa:0.25658337062111586):0.04348414441988464):0.036897766465122404,(cgl:0.29957965624763355,(sca:0.24\
+    212307199678842,(sba:0.03984952076326609,(((sce:0.022286259220280224,spa:0.016875934069075366):0.01282179619059339,smi:0.03661027033511007):0.013312280806766753,sku:0\
+    .042685124078088485):0.014142671709463695):0.17548658899657893):0.03625000527459598):0.08921537612721808):0.22545281705785974):0;"
+
+const phyloTree2 = "((sba:0.04645932805874481569,(smi:0.03315550229946162553,(spa:0.01466907419174275952,sce:0.02383733069302066895):0.01620853054082276729):0.01834962617511\
+207497):0.06496501071301066799,(sca:0.21928497146352055047,((((ago:0.34529718349701971070,kla:0.26611733077459831520):0.04460721000595434249,(kwa:0.23458417353426505580,sk\
+    l:0.38245746198409408256):0.02217438839159899949):0.02847427462232336726,(((pst:0.21220493191897629726,((cal:0.09792303271040220247,ctr:0.11778282966461572911):0.0799374\
+    2108354510989,lel:0.23757786374413303321):0.09896075353236584438):0.04667831716440219020,(pgu:0.28475663985974825065,dha:0.17797706546403241346):0.04249479494672471491)\
+    :0.29326816910580705278,yli:0.72911704942210797675):0.31199925135971823265):0.06946141605430436461,cgl:0.27125751484306920291):0.03678319509837457008):0.090113505058019\
+    94648,sku:3.28511106679567399524):0.0;"
+
+const testTree1 = "((A:1,B:2):5,((C:10,D:0.5):2,(E:1,F:3):2):3);"
+const testTree2 = "((A,E),((C,F),(B,D)));"
+
+sampleButton.addEventListener("click", function(e) {
+    stringInputAccept(e, testTree1, "Test_Tree_1");
+    stringInputAccept(e, testTree2, "Test_Tree_2");
+    stringInputAccept(e, phyloTree1, "phylo_example_tree_1");
+    stringInputAccept(e,  phyloTree2, "phylo_example_tree_2");
+})
+
 
 
 
